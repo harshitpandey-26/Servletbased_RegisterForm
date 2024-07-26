@@ -1,4 +1,4 @@
-package firstProject;
+package SignUpProject;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -13,16 +13,12 @@ import java.sql.SQLException;
 
 public class Register extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    public Register() {
-        super();
-    }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
 	}
-
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		
 		String name = request.getParameter("user_name");
 		String password = request.getParameter("user_password");
@@ -42,27 +38,23 @@ public class Register extends HttpServlet {
 			System.out.println(e.getMessage());
 		}
 		try {
-			
-			
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/signup","root",
 					"electron_2005");
 			
-			String query = "INSERT INTO DATA(name, password, email) VALUES(?,?,?)";
-			PreparedStatement preparedStatement = con.prepareStatement(query);
-			
-			preparedStatement.setString(1, name);
-			preparedStatement.setString(2, password);
-			preparedStatement.setString(3, email);
-			
-			preparedStatement.executeUpdate();
+			String query = "INSERT INTO DATA(name, password, email) VALUES(?,?,?)" ;
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setString(1, name);
+			ps.setString(2, password);
+			ps.setString(3, email);
+			ps.executeUpdate();
 			
 			out.println("Done");
 			
-			
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			System.out.println(e.getMessage());
-			out.println("Error...");
+			out.println("Error");
 		}
+		
 		
 		
 	}

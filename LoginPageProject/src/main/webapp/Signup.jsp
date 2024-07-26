@@ -111,53 +111,55 @@
 		crossorigin="anonymous">
 		
 	</script>
-
 	<script>
-		$(document).ready(function() {
-			console.log("Page is ready");
+	$(document).ready(function () {
+	    console.log("Page is ready");
 
-			var $form = $("#myform");
-			var $loader = $(".loader");
-			var $formContainer = $(".form");
+	    const SUCCESS_MESSAGE = "Done";
+	    const SUCCESS_CLASS = "green-text";
+	    const ERROR_CLASS = "red-text";
 
-			$form.on('submit', function(event) {
-				event.preventDefault();
+	    $("#myform").on('submit', function (event) {
+	        event.preventDefault();
 
-				var f = $(this).serialize();
+	        var f = $(this).serialize();
+	        console.log(f);
 
-				console.log(f);
+	        $(".loader").show();
+	        $(".form").hide();
 
-				$loader.show();
-				$formContainer.hide();
+	        $.ajax({
+	            url: "Register",
+	            data: f,
+	            type: 'POST',
+	            success: function (data, textStatus, jqXHR) {
+	                console.log(data);
+	                console.log("success...");
+	                handleResponse(data);
+	            },
+	            error: function (jqXHR, textStatus, errorThrown) {
+	                console.log(jqXHR.responseText);
+	                console.log("error...");
+	                handleResponse(null);
+	            }
+	        })
+	    });
 
-				$.ajax({
-					url : "Register",
-					data : f,
-					type : 'POST',
-					success : function(data, textStatus, jqXHR) {
-						console.log(data);
-						console.log("success...");
-						$loader.hide();
-						$formContainer.show();
-						if(data.trim()==='Done'){
-							$('#msg').html("Successfully Registered!!")
-							$('#msg').addClass('green-text')
-						}else{
-							$('#msg').html("Something went wrong on Server!!")
-							$('#msg').addClass('red-text')
-						}
-					},
-					error : function(jqXHR, textStatus, errorThrown) {
-						console.log(jqXHR.responseText);
-						console.log("error.....");
-						$loader.hide();
-						$formContainer.show();
-						$('#msg').html("Something went wrong on Server!!")
-					}
-				});
-			});
-		});
+	    function handleResponse(data) {
+	        $(".loader").hide();
+	        $(".form").show();
+
+	        if (data && data.trim() === SUCCESS_MESSAGE) {
+	            $("#msg").html("Successfully Registered!!");
+	            $("#msg").addClass(SUCCESS_CLASS);
+	        } else {
+	            $("#msg").html("Something wrong on the server");
+	            $("#msg").addClass(ERROR_CLASS);
+	        }
+	    }
+	});
 	</script>
+
 </body>
 
 </html>
